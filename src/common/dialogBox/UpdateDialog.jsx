@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function UpdateDialog() {
+export default function UpdateDialog({update}) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -28,17 +28,7 @@ export default function UpdateDialog() {
             <Dialog
                 open={open}
                 onClose={handleClose}
-                PaperProps={{
-                    component: 'form',
-                    onSubmit: (event) => {
-                        event.preventDefault();
-                        const formData = new FormData(event.currentTarget);
-                        const formJson = Object.fromEntries(formData.entries());
-                        const email = formJson.email;
-                        console.log(email);
-                        handleClose();
-                    },
-                }}
+               
             >
                 <DialogTitle>Add Student</DialogTitle>
                 <DialogContent>
@@ -53,6 +43,8 @@ export default function UpdateDialog() {
                         type="text"
                         fullWidth
                         variant="standard"
+                        onChange={(e)=>(e.target.value)}
+
                     />
 
                     <TextField
@@ -65,6 +57,8 @@ export default function UpdateDialog() {
                         type="number"
                         fullWidth
                         variant="standard"
+                        onChange={(e)=>(e.target.value)}
+
                     />
 
                     <TextField
@@ -77,6 +71,8 @@ export default function UpdateDialog() {
                         type="text"
                         fullWidth
                         variant="standard"
+                        onChange={(e)=>(e.target.value)}
+                        
                     />
 
                     <TextField
@@ -89,13 +85,14 @@ export default function UpdateDialog() {
                         type="number"
                         fullWidth
                         variant="standard"
+                        onChange={(e)=>(e.target.value)}
                     />
 
 
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} sx={{ color: 'red' }}>Cancel</Button>
-                    <Button type="submit">Update Student</Button>
+                    <Button type="submit" onClick={update}>Update Student</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>

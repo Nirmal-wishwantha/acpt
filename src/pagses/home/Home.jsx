@@ -20,6 +20,13 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ViewStudent from '../viewStudent/ViewStudent';
 import { Button } from '@mui/material';
+import Login from '../login/Login';
+import Register from '../register/Register'
+import routs from '../../common/navigation/routes';
+import { Routes, Link, Route } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+
+
 
 const drawerWidth = 240;
 
@@ -101,6 +108,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
+
 export default function Home() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -112,6 +120,21 @@ export default function Home() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    // routs
+
+    const getroutes = () =>
+
+        routs.map((val, index) =>
+            <Route key={index} path={val.path} element={val.element} />
+        )
+
+
+        const logOut=()=>{
+            localStorage.removeItem('iap-token');
+            
+            window.location.reload();
+        }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -138,8 +161,8 @@ export default function Home() {
                         Student Management System
                     </Typography>
 
-                    <Box sx={{backgroundColor:'#ad1457',borderRadius:1,boxShadow:5,marginLeft:130}}>
-                        <Button sx={{fontWeight:'bold',color:'white'}}>LogOut</Button>
+                    <Box sx={{ backgroundColor: '#ad1457', borderRadius: 1, boxShadow: 5, marginLeft: 130 }}>
+                        <Button sx={{ fontWeight: 'bold', color: 'white' }} onClick={logOut}>LogOut</Button>
                     </Box>
 
                 </Toolbar>
@@ -153,66 +176,82 @@ export default function Home() {
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
-                <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={[
-                                    {
-                                        minHeight: 48,
-                                        px: 2.5,
-                                    },
-                                    open
-                                        ? {
-                                            justifyContent: 'initial',
-                                        }
-                                        : {
-                                            justifyContent: 'center',
-                                        },
-                                ]}
-                            >
-                                <ListItemIcon
-                                    sx={[
-                                        {
-                                            minWidth: 0,
-                                            justifyContent: 'center',
-                                        },
-                                        open
-                                            ? {
-                                                mr: 3,
-                                            }
-                                            : {
-                                                mr: 'auto',
+
+
+
+
+                {
+                    routs.map((val, index) =>
+                        <Link key={index} to={val.path} style={{ textDecoration: 'none', color: 'black' }}>
+
+                            <List>
+
+                                <ListItem disablePadding sx={{ display: 'block' }}>
+                                    <ListItemButton
+                                        sx={[
+                                            {
+                                                minHeight: 48,
+                                                px: 2.5,
                                             },
-                                    ]}
-                                >
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={text}
-                                    sx={[
-                                        open
-                                            ? {
-                                                opacity: 1,
-                                            }
-                                            : {
-                                                opacity: 0,
-                                            },
-                                    ]}
-                                />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
+                                            open
+                                                ? {
+                                                    justifyContent: 'initial',
+                                                }
+                                                : {
+                                                    justifyContent: 'center',
+                                                },
+                                        ]}
+                                    >
+                                        <ListItemIcon
+                                            sx={[
+                                                {
+                                                    minWidth: 0,
+                                                    justifyContent: 'center',
+                                                },
+                                                open
+                                                    ? {
+                                                        mr: 3,
+                                                    }
+                                                    : {
+                                                        mr: 'auto',
+                                                    },
+                                            ]}
+                                        >
+                                            {val.pageicon}
+                                        </ListItemIcon>
+
+                                        <ListItemText
+                                            primary={val.text}
+                                            sx={[
+                                                open
+                                                    ? {
+                                                        opacity: 1,
+                                                    }
+                                                    : {
+                                                        opacity: 0,
+                                                    },
+                                            ]}
+                                        />
+                                    </ListItemButton>
+                                </ListItem>
+
+                            </List>
+
+                        </Link>
+                    )
+
+                }
+
                 <Divider />
 
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
 
-        {/* content */}
-
-        <ViewStudent/>
+                <Routes>
+                <Route path='*' element={<Navigate to={'/viewStudent'} />} />
+                    {getroutes()}
+                </Routes>
 
             </Box>
         </Box>
