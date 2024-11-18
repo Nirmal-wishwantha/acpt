@@ -3,25 +3,72 @@ import React, { useState } from 'react'
 import Limage from '../../assets/loginimage/Limage.png'
 import TextField from '@mui/material/TextField';
 import LoginIcon from '@mui/icons-material/Login';
-import { useNavigate } from 'react-router-dom';
-
-
-
+import { useNavigate,Navigate } from 'react-router-dom';
+import instance from '../../services/AxiosOder';
+import { Toast } from '../../common/funtion';
 
 
 export default function Register() {
 
     const navigate = useNavigate();
+    
     const navigateLogin = () => {
         navigate('/login')
     }
 
-   
+
+
+    const [name, setName] = useState();
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+    const [comPassword, setComPassword] = useState();
+
+
+    const changeRegister = () => {
+
+        if (name !== '' && email !== '' && password !== '' && comPassword !== '') {
+
+            if (password == comPassword) {
+
+                const data = {
+                    student_name: name,
+                    email: email,
+                    password: password
+                }
+
+                instance.post('/register', data)
+                    .then((res) => {
+
+                        Toast.fire({
+                            icon: "success",
+                            title: "Login in Succse..!"
+                          });
+                        console.log(res.data);
+                
+                    })
+                    .catch((err) => {
+                        Toast.fire({
+                            icon: "error",
+                            title: "Login in Faild"
+                          });
+                        console.log(err);
+                    })
+
+            }else{
+                console.log('check your password and comfarm password..!');
+            }
+
+        }else{
+            console.log('fil all fileds..!');
+        }
+    }
+
+
 
     return (
         <div>
 
-            <Box sx={{ display: 'flex', justifyContent: 'center',marginTop:3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 3 }}>
 
 
 
@@ -50,7 +97,7 @@ export default function Register() {
                                 multiline
                                 variant="standard"
                                 sx={{ display: 'flex', marginBottom: 2 }}
-                                onChange={(val) => SetName(val.target.value)}
+                                onChange={(val) => setName(val.target.value)}
                             />
 
                             <TextField
@@ -60,7 +107,7 @@ export default function Register() {
                                 multiline
                                 variant="standard"
                                 sx={{ display: 'flex' }}
-                                onChange={(val) => SetEmail(val.target.value)}
+                                onChange={(val) => setEmail(val.target.value)}
                             />
 
                             <TextField
@@ -70,7 +117,7 @@ export default function Register() {
                                 multiline
                                 variant="standard"
                                 sx={{ display: 'flex', marginTop: 2 }}
-                                onChange={(val) => SetPassword(val.target.value)}
+                                onChange={(val) => setPassword(val.target.value)}
                             />
 
                             <TextField
@@ -80,7 +127,7 @@ export default function Register() {
                                 multiline
                                 variant="standard"
                                 sx={{ display: 'flex', marginTop: 2 }}
-                                onChange={(val) => SetComPassword(val.target.value)}
+                                onChange={(val) => setComPassword(val.target.value)}
                             />
 
                             <Box>
@@ -101,7 +148,7 @@ export default function Register() {
                                         backgroundColor: '#00ace6', padding: 1, width: 110, color: 'white',
                                         fontWeight: 600, ":hover": { backgroundColor: '#0086b3' }, boxShadow: 8
                                     }}
-                                    // onClick={() => submitRegister()}
+                                    onClick={() => changeRegister()}
                                 >Register
                                 </Button>
 

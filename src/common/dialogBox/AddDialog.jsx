@@ -6,6 +6,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import instance from '../../services/AxiosOder';
+import { useState } from 'react';
 
 export default function AddDialog() {
     const [open, setOpen] = React.useState(false);
@@ -17,6 +19,46 @@ export default function AddDialog() {
     const handleClose = () => {
         setOpen(false);
     };
+
+
+
+    const [name, setName] = useState();
+    const [age, setAge] = useState();
+    const [address, setaddress] = useState();
+    const [contact, setcontact] = useState();
+
+
+
+    const studentsave = () => {
+        if (name !== '' && age !== '' && address !== '' && contact !== '') {
+            const data = {
+                student_name: name,
+                student_age: age,
+                student_address: address,
+                student_contact: contact
+            };
+            const token = localStorage.getItem('iap-token');
+    
+            instance.post('/student/save', data, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            .then((res) => {
+                console.log(res);
+                window.location.reload();
+            })
+          
+            .catch((err) => {
+                console.log('Error occurred:', err);
+            });
+        } else {
+            console.log('Please fill all fields');
+        }
+    };
+    
 
     return (
         <React.Fragment>
@@ -53,49 +95,50 @@ export default function AddDialog() {
                         type="text"
                         fullWidth
                         variant="standard"
+                        onChange={(e) => setName(e.target.value)}
                     />
 
                     <TextField
                         autoFocus
                         required
                         margin="dense"
-                        id="name"
                         name="age"
                         label="Age"
                         type="number"
                         fullWidth
                         variant="standard"
+                        onChange={(e) => setAge(e.target.value)}
                     />
 
                     <TextField
                         autoFocus
                         required
                         margin="dense"
-                        id="name"
                         name="address"
                         label="Address"
                         type="text"
                         fullWidth
                         variant="standard"
+                        onChange={(e) => setaddress(e.target.value)}
                     />
 
                     <TextField
                         autoFocus
                         required
                         margin="dense"
-                        id="name"
                         name="contact"
                         label="Contact"
                         type="number"
                         fullWidth
                         variant="standard"
+                        onChange={(e) => setcontact(e.target.value)}
                     />
 
 
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} sx={{ color: 'red' }}>Cancel</Button>
-                    <Button type="submit">Add Student</Button>
+                    <Button type="submit" onClick={studentsave}>Add Student</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>
